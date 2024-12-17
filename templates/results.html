@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFFFFF;
+            color: #000000;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            color: #3366CC;
+        }
+        .search-bar {
+            margin: 20px 0;
+        }
+        .results {
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+        }
+        .result-item {
+            border-bottom: 1px solid #E0E0E0;
+            padding: 15px 0;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .favicon {
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .title {
+            font-size: 18px;
+            color: #1a0dab;
+            text-decoration: none;
+        }
+        .url {
+            font-size: 14px;
+            color: #006621;
+        }
+        .description {
+            font-size: 13px;
+            color: #545454;
+            margin-top: 5px;
+        }
+        .pagination {
+            margin-top: 20px;
+        }
+        .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #1a0dab;
+        }
+        .pagination a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Results</h1>
+    <div class="search-bar">
+        <form action="/results" method="GET">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="results">
+        {% for result in results[:7] %}
+        <div class="result-item">
+            <div>
+                <img class="favicon" src="{{ result[4] }}" alt="Favicon" width="16" height="16">
+                <a href="{{ result[1] }}" class="title" target="_blank">{{ result[2] }}</a>
+            </div>
+            <div class="url">{{ result[1] }}</div>
+            <div class="description">{{ result[3] }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if results|length > 7 %}
+    <div class="pagination">
+        {% for i in range(1, (results|length // 7) + 2) %}
+        <a href="/results?q={{ query }}&page={{ i }}">{{ i }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+</html>
